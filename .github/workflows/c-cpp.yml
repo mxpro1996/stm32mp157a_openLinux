@@ -25,8 +25,8 @@ jobs:
         CROSS_COMPILE: arm-none-eabi-
         ARCH: arm
       run: |
-        make ARCH=arm O="$PWD/build" multi_v7_defconfig
         mkdir build
+        make ARCH=arm O="$PWD/build" multi_v7_defconfig
         make ARCH=arm uImage vmlinux dtbs LOADADDR=0xC2000040 O="$PWD/build"
         make ARCH=arm modules O="$PWD/build"
         make ARCH=arm INSTALL_MOD_PATH="$PWD/build/install_artifact" modules_install O="$PWD/build"
