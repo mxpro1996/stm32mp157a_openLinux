@@ -1,0 +1,39 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "WORKING" ]
+  pull_request:
+    branches: [ "WORKING" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Prepare dependencies....
+      run: |
+        sudo apt-get install libncurses5-dev libncursesw5-dev libyaml-dev -yq
+        sudo apt-get install u-boot-tools -yq
+        sudo apt-get install libyaml-dev -yq
+        sudo apt-get install gcc-arm-none-eabi -yq
+    - name: Make....
+      env:
+        CROSS_COMPILE: arm-none-eabi-
+        ARCH: arm
+      run: |
+        make ARCH=arm O="$PWD/build" multi_v7_defconfig
+        mkdir build
+        make ARCH=arm uImage vmlinux dtbs LOADADDR=0xC2000040 O="$PWD/build"
+        make ARCH=arm modules O="$PWD/build"
+        make ARCH=arm INSTALL_MOD_PATH="$PWD/build/install_artifact" modules_install O="$PWD/build"
+        mkdir -p $PWD/build/install_artifact/boot/
+        cp $PWD/build/arch/arm/boot/uImage $PWD/build/install_artifact/boot/
+        cp $PWD/build/arch/arm/boot/dts/st*.dtb $PWD/build/install_artifact/boot/
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: kernel_dtb_mp157
+        path: build/install_artifact 
