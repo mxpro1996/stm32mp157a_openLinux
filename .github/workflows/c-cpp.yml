@@ -33,7 +33,7 @@ jobs:
         mkdir -p $PWD/build/install_artifact/boot/
         cp $PWD/build/arch/arm/boot/uImage $PWD/build/install_artifact/boot/
         cp $PWD/build/arch/arm/boot/dts/st*.dtb $PWD/build/install_artifact/boot/
-        tar -zcvf install_artifact.tgz install_artifact
+        tar -zcvf install_artifact.tgz build/install_artifact
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.1
       with:
