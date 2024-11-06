@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Prepare dependencies....
@@ -18,25 +16,21 @@ jobs:
         sudo apt update
         sudo apt-get install libncurses5-dev libncursesw5-dev libyaml-dev -yq
         sudo apt-get install u-boot-tools -yq
-        sudo apt-get install libelf-dev -yq
         sudo apt-get install gcc-arm-none-eabi -yq
+    - uses: hendrikmuhs/ccache-action@v1.2.13
     - name: Make....
+      env:
+        CROSS_COMPILE: ccache arm-none-eabi-
+        ARCH: arm
       run: |
         mkdir build
-        #make ARCH=arm O="$PWD/build" multi_v7_defconfig
-        #make ARCH=arm uImage vmlinux dtbs LOADADDR=0xC2000040 O="$PWD/build" -j`nproc --all`
-        #make ARCH=arm modules O="$PWD/build" -j`nproc --all`
-        #make ARCH=arm INSTALL_MOD_PATH="$PWD/build/install_artifact" modules_install O="$PWD/build" 
-        #mkdir -p $PWD/build/install_artifact/boot/
-        #cp $PWD/build/arch/arm/boot/uImage $PWD/build/install_artifact/boot/
-        #cp $PWD/build/arch/arm/boot/dts/st*.dtb $PWD/build/install_artifact/boot/
-        #tar -zcvf install_artifact.tgz build/install_artifact
-        make O="$PWD/build" defconfig
-        make vmlinux O="$PWD/build" -j`nproc --all`
+        make O="$PWD/build" multi_v7_defconfig
+        make uImage vmlinux dtbs LOADADDR=0xC2000040 O="$PWD/build" -j`nproc --all`
         make modules O="$PWD/build" -j`nproc --all`
         make INSTALL_MOD_PATH="$PWD/build/install_artifact" modules_install O="$PWD/build" 
         mkdir -p $PWD/build/install_artifact/boot/
-        cp vmlinux $PWD/build/install_artifact/boot/
+        cp $PWD/build/arch/arm/boot/uImage $PWD/build/install_artifact/boot/
+        cp $PWD/build/arch/arm/boot/dts/st*.dtb $PWD/build/install_artifact/boot/
         tar -zcvf install_artifact.tgz build/install_artifact
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.1
