@@ -32,11 +32,11 @@ jobs:
         #cp $PWD/build/arch/arm/boot/dts/st*.dtb $PWD/build/install_artifact/boot/
         #tar -zcvf install_artifact.tgz build/install_artifact
         make O="$PWD/build" defconfig
-        make zImage vmlinux O="$PWD/build" -j`nproc --all`
+        make vmlinux O="$PWD/build" -j`nproc --all`
         make modules O="$PWD/build" -j`nproc --all`
         make INSTALL_MOD_PATH="$PWD/build/install_artifact" modules_install O="$PWD/build" 
         mkdir -p $PWD/build/install_artifact/boot/
-        cp $PWD/build/arch/x86/boot/zImage $PWD/build/install_artifact/boot/
+        cp vmlinux $PWD/build/install_artifact/boot/
         tar -zcvf install_artifact.tgz build/install_artifact
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.1
