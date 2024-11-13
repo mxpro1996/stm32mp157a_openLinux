@@ -159,6 +159,11 @@
 		regulator-always-on;
 		regulator-boot-on;
 	};
+
+	wifi_pwrseq: wifi-pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&gpiod 4 GPIO_ACTIVE_LOW>;
+	};
 };
 
 // &adc {
@@ -462,17 +467,26 @@
 	status = "okay";
 };
 
-// &sdmmc3 {
-// 	pinctrl-names = "default", "opendrain", "sleep";
-// 	pinctrl-0 = <&sdmmc3_b4_pins_a>;
-// 	pinctrl-1 = <&sdmmc3_b4_od_pins_a>;
-// 	pinctrl-2 = <&sdmmc3_b4_sleep_pins_a>;
-// 	broken-cd;
-// 	st,neg-edge;
-// 	bus-width = <4>;
-// 	vmmc-supply = <&v3v3>;
-// 	status = "disabled";
-// };
+&sdmmc3 {
+	arm,primecell-periphid = <0x10153180>;
+	pinctrl-names = "default", "opendrain", "sleep";
+	pinctrl-0 = <&sdmmc3_b4_wifi_pins_a>;
+	pinctrl-1 = <&sdmmc3_b4_od_wifi_pins_a>;
+	pinctrl-2 = <&sdmmc3_b4_sleep_wifi_pins_a>;
+	non-removable;
+	st,neg-edge;
+	bus-width = <4>;
+	vmmc-supply = <&v3v3>;
+	mmc-pwrseq = <&wifi_pwrseq>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	keep-power-in-suspend;
+	status = "okay";
+	brcmf: bcrmf@1 {
+		reg = <1>;
+		compatible = "brcm,bcm4329-fmac";
+	};
+};
 
 // &spi4 {
 // 	pinctrl-names = "default", "sleep";
@@ -576,6 +590,57 @@
 					 <STM32_PINMUX('D', 12, ANALOG)>, /* USART3_RTS */
 				 	 <STM32_PINMUX('D', 9, ANALOG)>, /* USART3_RX */
 					 <STM32_PINMUX('D', 11, ANALOG)>; /* USART3_CTS_NSS */
+		};
+	};
+	sdmmc3_b4_wifi_pins_a: sdmmc3-b4-wifi-0 {
+		pins1 {
+			pinmux = <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
+					<STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
+					<STM32_PINMUX('D', 5, AF10)>, /* SDMMC3_D2 */
+					<STM32_PINMUX('D', 7, AF10)>, /* SDMMC3_D3 */
+					<STM32_PINMUX('D', 0, AF10)>; /* SDMMC3_CMD */
+					slew-rate = <1>;
+					drive-push-pull;
+					bias-pull-up;
+		};
+		pins2 {
+			pinmux = <STM32_PINMUX('G', 15, AF10)>; /* SDMMC3_CK */
+			slew-rate = <2>;
+			drive-push-pull;
+			bias-pull-up;
+		};
+	};
+	sdmmc3_b4_od_wifi_pins_a: sdmmc3-b4-od-wifi-0 {
+		pins1 {
+			pinmux = <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
+					<STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
+					<STM32_PINMUX('D', 5, AF10)>, /* SDMMC3_D2 */
+					<STM32_PINMUX('D', 7, AF10)>; /* SDMMC3_D3 */
+					slew-rate = <1>;
+					drive-push-pull;
+					bias-pull-up;
+		};
+		pins2 {
+			pinmux = <STM32_PINMUX('G', 15, AF10)>; /* SDMMC3_CK */
+			slew-rate = <2>;
+			drive-push-pull;
+			bias-pull-up;
+		};
+		pins3 {
+			pinmux = <STM32_PINMUX('D', 0, AF10)>; /* SDMMC3_CMD */
+			slew-rate = <1>;
+			drive-open-drain;
+			bias-pull-up;
+		};
+	};
+	sdmmc3_b4_sleep_wifi_pins_a: sdmmc3-b4-sleep-wifi-0 {
+		pins {
+			pinmux = <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
+					<STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
+					<STM32_PINMUX('D', 5, AF10)>, /* SDMMC3_D2 */
+					<STM32_PINMUX('D', 7, AF10)>, /* SDMMC3_D3 */
+					<STM32_PINMUX('G', 15, AF10)>, /* SDMMC3_CK */
+					<STM32_PINMUX('D', 0, AF10)>; /* SDMMC3_CMD */
 		};
 	};
 };
