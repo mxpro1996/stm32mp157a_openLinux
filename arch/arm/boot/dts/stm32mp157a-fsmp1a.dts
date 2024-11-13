@@ -20,6 +20,7 @@
 		serial0 = &uart4;
 		//serial1 = &usart3;
 		//serial2 = &uart7;
+		serial5 = &usart3;
 	};
 
 	panel: panel-rgb {
@@ -33,6 +34,13 @@
 				remote-endpoint = <&ltdc_ep1_out>;
 			};
 		};
+	};
+
+	rtc {
+		st,lsco = <RTC_OUT2_RMP>;
+		pinctrl-0 = <&rtc_out2_rmp_pins_a>;
+		pinctrl-names = "default";
+		status = "okay";
 	};
 
 	chosen {
