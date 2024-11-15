@@ -65,15 +65,24 @@
 		status = "okay";
 	};
 	
-	// led {
-	// 	compatible = "gpio-leds";
-	// 	blue {
-	// 		label = "heartbeat";
-	// 		gpios = <&gpiod 11 GPIO_ACTIVE_HIGH>;
-	// 		linux,default-trigger = "heartbeat";
-	// 		default-state = "off";
-	// 	};
-	// };
+	led {
+		compatible = "gpio-leds";
+		led1 {
+			label = "led1";
+			gpios = <&gpioz 5 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+		led2 {
+			label = "led2";
+			gpios = <&gpioz 6 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+		led3 {
+			label = "led3";
+			gpios = <&gpioz 7 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+	};
 
 	sound {
 		compatible = "audio-graph-card";
