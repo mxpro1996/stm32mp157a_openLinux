@@ -389,10 +389,10 @@
 // 	status = "okay";
 // };
 
-// &pwr_regulators {
-// 	vdd-supply = <&vdd>;
-// 	vdd_3v3_usbfs-supply = <&vdd_usb>;
-// };
+&pwr_regulators {
+	vdd-supply = <&vdd>;
+	vdd_3v3_usbfs-supply = <&vdd_usb>;
+};
 
 &rng1 {
 	status = "okay";
@@ -761,10 +761,10 @@
 	};
 };
 
-// &usbh_ehci {
-// 	phys = <&usbphyc_port0>;
-// 	status = "okay";
-// };
+&usbh_ehci {
+	phys = <&usbphyc_port0>;
+	status = "okay";
+};
 
 // &usbotg_hs {
 // 	phys = <&usbphyc_port1 0>;
@@ -779,19 +779,19 @@
 // 	};
 // };
 
-// &usbphyc {
-// 	status = "okay";
-// };
+&usbphyc {
+	status = "okay";
+};
 
-// &usbphyc_port0 {
-// 	phy-supply = <&vdd_usb>;
-// 	st,phy-tuning = <&usb_phy_tuning>;
-// };
+&usbphyc_port0 {
+	phy-supply = <&vdd_usb>;
+	st,phy-tuning = <&usb_phy_tuning>;
+};
 
-// &usbphyc_port1 {
-// 	phy-supply = <&vdd_usb>;
-// 	st,phy-tuning = <&usb_phy_tuning>;
-// };
+&usbphyc_port1 {
+	phy-supply = <&vdd_usb>;
+	st,phy-tuning = <&usb_phy_tuning>;
+};
 
 &vrefbuf {
 	regulator-min-microvolt = <2500000>;
