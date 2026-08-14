@@ -210,7 +210,8 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_put;
 
-	drm_fbdev_generic_setup(ddev, 16);
+	//drm_fbdev_generic_setup(ddev, 16);
+	drm_fbdev_generic_setup(ddev, 32);
 
 	return 0;
 
