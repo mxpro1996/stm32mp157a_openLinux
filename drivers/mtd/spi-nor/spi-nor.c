@@ -2156,6 +2156,9 @@ static struct spi_nor_fixups gd25q256_fixups = {
  */
 static const struct flash_info spi_nor_ids[] = {
 	/* Atmel -- some are (confusingly) marketed as "DataFlash" */
+	{ "py25q32h", 	INFO(0x852016, 0, 64 * 1024, 64,
+			SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
+			
 	{ "at25fs010",  INFO(0x1f6601, 0, 32 * 1024,   4, SECT_4K) },
 	{ "at25fs040",  INFO(0x1f6604, 0, 64 * 1024,   8, SECT_4K) },
 
