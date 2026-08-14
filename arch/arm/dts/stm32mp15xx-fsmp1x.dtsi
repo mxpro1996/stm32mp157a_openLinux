@@ -678,8 +678,70 @@
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&spi5_pins_a>;
 	pinctrl-1 = <&spi5_sleep_pins_a>;
-	status = "disabled";
+	status = "okay";
+	cs-gpios = <&gpiof 6 0>;
+
+	flash@0 {
+		compatible = "puya,py25q32h", "spi-nand";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		reg = <0>;
+		m25p,fast-read;
+		/* The max SCLK of the flash 104/80 MHZ  */
+		spi-max-frequency = <10000000>;
+
+		partitions {
+            compatible = "fixed-partitions";
+            #address-cells = <1>;
+            #size-cells = <1>;
+
+            /* First Stage Bootloader 1 (FSBL1) */
+            fsbl1: partition@0 {
+                label = "fsbl1";
+                reg = <0x000000 0x00040000>; /* Offset 0x000000, Size 256K (0x00040000) */
+            };
+
+            /* First Stage Bootloader 2 (FSBL2) */
+            fsbl2: partition@40000 {
+                label = "fsbl2";
+                reg = <0x00040000 0x00040000>; /* Offset 256K, Size 256K */
+            };
+
+            /* Second Stage Bootloader (SSBL) */
+            ssbl: partition@80000 {
+                label = "ssbl";
+                reg = <0x00080000 0x00400000>; /* Offset 512K, Size 2M */
+            };
+
+            /* U-Boot Environment */
+            ubootenv: partition@480000 {
+                label = "ubootenv";
+                reg = <0x00480000 0x00080000>; /* Offset 2.5M, Size 512K */
+                read-only;  /* 如果你希望 U-Boot 环境变量只读 */
+            };
+        };
+	};
+
 };
+
+// &qspi {
+// 	pinctrl-names = "default", "sleep";
+// 	pinctrl-0 = <&qspi_clk_pins_a &qspi_bk1_pins_a &qspi_bk2_pins_a>;
+// 	pinctrl-1 = <&qspi_clk_sleep_pins_a &qspi_bk1_sleep_pins_a &qspi_bk2_sleep_pins_a>;
+// 	reg = <0x58003000 0x1000>, <0x70000000 0x4000000>;
+// 	#address-cells = <1>;
+// 	#size-cells = <0>;
+// 	status = "okay";
+
+// 	flash0: py25q32h@0 {
+// 		compatible = "jedec,spi-nor";
+// 		reg = <0>;
+// 		spi-rx-bus-width = <4>;
+// 		spi-max-frequency = <108000000>;
+// 		#address-cells = <1>;
+// 		#size-cells = <1>;
+// 	};
+// };
 
 &sram {
 	dma_pool: dma_pool@0 {

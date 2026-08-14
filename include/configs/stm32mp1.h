@@ -10,6 +10,26 @@
 #include <linux/sizes.h>
 #include <asm/arch/stm32.h>
 
+/* QSPI XIP Map */
+// #ifdef CONFIG_STM32_QSPI
+// # define CONFIG_SYS_FLASH_BASE		0x70000000
+// # define CONFIG_SYS_FLASH_SIZE		(4 * 1024 * 1024) 
+// # define CONFIG_SYS_MAX_FLASH_BANKS	1
+// # define CONFIG_SYS_MAX_FLASH_SECT	64
+// # define CONFIG_SYS_FLASH_ERASE_TOUT	1000
+// # define CONFIG_SYS_FLASH_WRITE_TOUT	5000
+// # define CONFIG_FLASH_SHOW_PROGRESS	10
+// #endif  /* #ifdef CONFIG_STM32_QSPI*/
+
+/* Environment */
+#ifndef CONFIG_ENV_IS_NOWHERE
+# define CONFIG_ENV_SECT_SIZE		CONFIG_ENV_SIZE * 16
+
+# ifndef CONFIG_ENV_OFFSET
+#  define CONFIG_ENV_OFFSET		0x170000
+# endif
+#endif
+
 #ifndef CONFIG_STM32MP1_TRUSTED
 /* PSCI support */
 #define CONFIG_ARMV7_PSCI_1_0
